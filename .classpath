@@ -12,6 +12,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src/main/resources/templates"/>
+	<classpathentry kind="src" path="src/main/resources/static"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/jsp/jsp-api/2.1/jsp-api-2.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/jstl/1.2/jstl-1.2.jar"/>

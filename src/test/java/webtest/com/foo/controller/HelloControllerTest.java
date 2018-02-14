@@ -2,6 +2,7 @@ package com.foo.controller;
 
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,8 +26,16 @@ public class HelloControllerTest {
 
     @Test
     public void getHello() throws Exception {
+    	
         mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("Greetings from Spring Boot!")));
+    }
+    
+    
+    @Test
+    public void getSomething() throws Exception {
+    	
+    	assertTrue(1==1);
     }
 }

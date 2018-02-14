@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd  
+                      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+	<context:component-scan base-package="com.myapp.dao.security" />
+	<context:component-scan base-package="com.myapp.model.security" />
+
+	<beans:bean id="springVoter"
+		class="org.springframework.security.access.vote.RoleVoter" />
+	<beans:bean id="springAccessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<beans:property name="allowIfAllAbstainDecisions"
+			value="false" />
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:ref local="springVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+
+	<http auto-config="false" entry-point-ref="preAuthenticatedProcessingFilterEntryPoint">
+		<security:custom-filter position="PRE_AUTH_FILTER"
+			ref="siteminderFilter" />
+		<intercept-url pattern="/**/details.csv*"
+			access="ROLE_viewer, ROLE_standard, ROLE_senior" />
+		<logout logout-url="/j_spring_security_logout"
+			logout-success-url="https://smlogin-dev.myapp.net/siteminderagent/ssologout/Logout.html"
+			invalidate-session="true" />
+	</http>
+
+
+	<beans:bean id="preAuthenticatedProcessingFilterEntryPoint"
+		class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint" />
+
+	<beans:bean id="siteminderFilter"
+		class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
+		<beans:property name="principalRequestHeader" value="SM_USER" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="exceptionIfHeaderMissing" value="false" />
+	</beans:bean>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider
+			ref="preauthAuthProvider" />
+	</security:authentication-manager>
+
+	<beans:bean id="preauthAuthProvider"
+		class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+		<beans:property name="preAuthenticatedUserDetailsService">
+			<beans:bean id="userDetailsServiceWrapper"
+				class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+				<beans:property name="userDetailsService" ref="myUserDetailsService" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="myUserDetailsService" class="com.myapp.UserDetailsServiceImpl">
+		<beans:property name="appCd" value="appName" />
+	</beans:bean>
+
+	<http auto-config="false" access-decision-manager-ref="springAccessDecisionManager"
+		once-per-request="true" create-session="ifRequired" entry-point-ref="MyAppAuthenticationEntryPoint">
+
+		<session-management invalid-session-url="/j_spring_security_logout" />
+		<!-- TODO: Would be cleaner if we didn't have to enumerate every role that 
+			can access some URL in the system. Consider hierarchical roles -->
+		<intercept-url pattern="/**/*.css*" filters="none" />
+		<intercept-url pattern="/**/*.js*" filters="none" />
+		<intercept-url pattern="/**/*.png*" filters="none" />
+		<intercept-url pattern="/**/codemapping.rpc" access="ROLE_admin,ROLE_viewer" />
+		<intercept-url pattern="/**/generalLedgerService.rpc"
+			access="ROLE_admin" />
+		<intercept-url pattern="/**/MyAppAdjustment.html"
+			access="ROLE_admin,ROLE_viewer" />
+		<intercept-url pattern="/**/CodeMapping.html" access="ROLE_admin,ROLE_viewer" />
+		<intercept-url pattern="/**/myapp_test.html" access="ROLE_admin" />
+		<custom-filter ref="siteminderFilter" position="PRE_AUTH_FILTER" />
+		<access-denied-handler ref="accessDeniedHandler" />
+
+
+	</http>
+
+
+</beans:beans>

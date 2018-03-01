@@ -1,5 +1,6 @@
 com/foo/model/User.class
+com/foo/controller/SecurityWebApplicationInitializer.class
 com/foo/controller/Application.class
 com/foo/controller/SecurityConfiguration.class
-com/foo/controller/HelloController.class
 com/foo/controller/GreetingController.class
+com/foo/controller/MvcConfig.class

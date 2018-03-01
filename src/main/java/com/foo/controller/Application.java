@@ -24,6 +24,7 @@ public class Application {
 
 		SpringApplication app = new SpringApplication(Application.class);
 		app.setBannerMode(Banner.Mode.OFF);
+		System.setProperty("spring.devtools.restart.enabled", "false");
 		app.run(args);
 	}
 

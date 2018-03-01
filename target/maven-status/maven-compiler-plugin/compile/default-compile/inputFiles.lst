@@ -2,4 +2,6 @@
 /home/eveloso/eclipse-workspace/wolom/webtest/src/main/java/com/foo/model/User.java
 /home/eveloso/eclipse-workspace/wolom/webtest/src/main/java/com/foo/controller/HelloController.java
 /home/eveloso/eclipse-workspace/wolom/webtest/src/main/java/com/foo/controller/Application.java
+/home/eveloso/eclipse-workspace/wolom/webtest/src/main/java/com/foo/controller/SecurityWebApplicationInitializer.java
 /home/eveloso/eclipse-workspace/wolom/webtest/src/main/java/com/foo/controller/GreetingController.java
+/home/eveloso/eclipse-workspace/wolom/webtest/src/main/java/com/foo/controller/MvcConfig.java
